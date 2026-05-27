@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ഏതാ മൂഡ് – Mollywood Vibe</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@300;400;600;700&family=Yatra+One&family=Tiro+Malayalam&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #17171f;
+    --border: #252535;
+    --gold: #f5c842;
+    --gold2: #e8973a;
+    --red: #e8394a;
+    --green: #1ed760;
+    --teal: #1db8a0;
+    --yt: #ff0000;
+    --spotify: #1ed760;
+    --text: #f0eee6;
+    --muted: #6a6880;
+    --user-bubble: #1f1a0d;
+    --bot-bubble: #0f0f1a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans Malayalam', 'Tiro Malayalam', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 40% at 10% 10%, rgba(245,200,66,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 90% 90%, rgba(232,57,74,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 50% 50%, rgba(29,184,160,0.04) 0%, transparent 70%);
+    animation: bgpulse 10s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes bgpulse { 0%{opacity:1} 100%{opacity:0.6} }
+
+  header {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 720px;
+    padding: 18px 22px 0;
+    display: flex; align-items: center; gap: 14px;
+  }
+
+  .logo-lamp {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff8e1, var(--gold) 50%, var(--gold2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 0 0 2px rgba(245,200,66,0.3), 0 0 30px rgba(245,200,66,0.5), 0 0 60px rgba(232,151,58,0.3);
+    animation: lampglow 3s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes lampglow {
+    0%,100% { box-shadow: 0 0 0 2px rgba(245,200,66,0.3), 0 0 30px rgba(245,200,66,0.5), 0 0 60px rgba(232,151,58,0.3); }
+    50%      { box-shadow: 0 0 0 4px rgba(245,200,66,0.5), 0 0 50px rgba(245,200,66,0.8), 0 0 90px rgba(232,57,74,0.3); }
+  }
+
+  .header-text h1 {
+    font-family: 'Yatra One', cursive;
+    font-size: 1.6rem;
+    background: linear-gradient(90deg, var(--gold), var(--gold2), var(--red));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .header-text p { font-size: 0.72rem; color: var(--muted); margin-top: 3px; letter-spacing: 0.05em; }
+
+  .status-pill {
+    margin-left: auto;
+    padding: 4px 10px; border-radius: 20px;
+    border: 1px solid rgba(245,200,66,0.3);
+    background: rgba(245,200,66,0.06);
+    font-size: 0.68rem; color: var(--gold);
+    display: flex; align-items: center; gap: 5px; white-space: nowrap;
+  }
+  .status-pill::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold); animation: blink 2s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.2} }
+
+  .border-strip { position: relative; z-index: 2; width: 100%; max-width: 720px; padding: 0 22px; margin-top: 12px; }
+  .border-strip div {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold2), var(--red), var(--gold2), var(--gold), transparent);
+    border-radius: 2px; opacity: 0.6;
+  }
+
+  .chat-wrapper {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 720px;
+    height: calc(100vh - 155px);
+    display: flex; flex-direction: column;
+    padding: 10px 16px 0;
+  }
+
+  #chat-box {
+    flex: 1; overflow-y: auto;
+    padding: 8px 4px 20px;
+    display: flex; flex-direction: column; gap: 16px;
+    scroll-behavior: smooth;
+  }
+  #chat-box::-webkit-scrollbar { width: 3px; }
+  #chat-box::-webkit-scrollbar-thumb { background: rgba(245,200,66,0.2); border-radius: 3px; }
+
+  .msg { display: flex; gap: 10px; animation: fadein 0.35s ease; }
+  @keyframes fadein { from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none} }
+  .msg.user { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .avatar.bot-av { background: radial-gradient(circle at 35% 35%, #fff8e1, var(--gold)); box-shadow: 0 0 10px rgba(245,200,66,0.4); }
+  .avatar.user-av { background: var(--user-bubble); border: 1px solid rgba(245,200,66,0.3); }
+
+  .bubble {
+    max-width: 82%; padding: 12px 16px; border-radius: 18px;
+    font-size: 0.88rem; line-height: 1.65;
+  }
+  .msg.bot .bubble { background: var(--bot-bubble); border: 1px solid var(--border); border-top-left-radius: 4px; }
+  .msg.user .bubble { background: var(--user-bubble); border: 1px solid rgba(245,200,66,0.2); border-top-right-radius: 4px; }
+
+  /* Rec cards */
+  .rec-section { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+
+  .rec-card {
+    background: linear-gradient(135deg, rgba(23,23,31,0.9), rgba(15,15,26,0.9));
+    border: 1px solid var(--border); border-radius: 14px; padding: 11px 14px;
+    position: relative; overflow: hidden;
+  }
+  .rec-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .rec-card.movies::before { background: linear-gradient(180deg, var(--gold), var(--gold2)); }
+  .rec-card.songs::before  { background: linear-gradient(180deg, var(--spotify), #17a24a); }
+
+  .rec-card h4 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; font-weight: 600; }
+  .rec-card.movies h4 { color: var(--gold); }
+  .rec-card.songs  h4 { color: var(--spotify); }
+
+  .rec-list { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* Clickable pills */
+  .rec-pill {
+    padding: 5px 12px; border-radius: 20px;
+    font-size: 0.77rem; border: 1px solid;
+    font-family: 'Noto Sans Malayalam', sans-serif;
+    cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 5px;
+    transition: all 0.2s; position: relative;
+  }
+  .rec-pill:hover { transform: translateY(-2px); filter: brightness(1.2); }
+  .rec-pill:active { transform: scale(0.96); }
+
+  .rec-pill.movie {
+    background: rgba(255,0,0,0.08); border-color: rgba(255,0,0,0.3); color: #ff7070;
+  }
+  .rec-pill.movie:hover { background: rgba(255,0,0,0.18); box-shadow: 0 4px 12px rgba(255,0,0,0.2); }
+
+  .rec-pill.song {
+    background: rgba(30,215,96,0.08); border-color: rgba(30,215,96,0.3); color: #5de88a;
+  }
+  .rec-pill.song:hover { background: rgba(30,215,96,0.18); box-shadow: 0 4px 12px rgba(30,215,96,0.2); }
+
+  .pill-icon { font-size: 0.72rem; opacity: 0.85; }
+
+  /* Mood chips */
+  .mood-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+  .chip {
+    padding: 5px 13px; border-radius: 20px;
+    border: 1px solid rgba(245,200,66,0.2); background: rgba(245,200,66,0.05);
+    font-size: 0.8rem; cursor: pointer; color: var(--text);
+    font-family: 'Noto Sans Malayalam', sans-serif; transition: all 0.2s;
+  }
+  .chip:hover { border-color: var(--gold); background: rgba(245,200,66,0.12); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(245,200,66,0.15); }
+
+  /* Typing */
+  .typing {
+    display: flex; gap: 5px; padding: 14px 18px;
+    background: var(--bot-bubble); border: 1px solid var(--border);
+    border-radius: 18px; border-top-left-radius: 4px; align-items: center;
+  }
+  .typing span { width: 7px; height: 7px; border-radius: 50%; animation: tbounce 1.3s infinite; }
+  .typing span:nth-child(1) { background: var(--gold); }
+  .typing span:nth-child(2) { background: var(--gold2); animation-delay: 0.2s; }
+  .typing span:nth-child(3) { background: var(--red); animation-delay: 0.4s; }
+  @keyframes tbounce { 0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)} }
+
+  .input-bar { padding: 12px 0 16px; display: flex; gap: 10px; align-items: flex-end; }
+
+  #user-input {
+    flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 12px 16px; color: var(--text);
+    font-family: 'Noto Sans Malayalam', sans-serif; font-size: 0.88rem;
+    resize: none; outline: none; min-height: 46px; max-height: 120px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  #user-input:focus { border-color: rgba(245,200,66,0.5); box-shadow: 0 0 0 3px rgba(245,200,66,0.07); }
+  #user-input::placeholder { color: var(--muted); }
+
+  #send-btn {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+    flex-shrink: 0; transition: transform 0.15s, box-shadow 0.2s; color: #1a1000;
+  }
+  #send-btn:hover { transform: scale(1.08); box-shadow: 0 0 20px rgba(245,200,66,0.5); }
+  #send-btn:active { transform: scale(0.95); }
+  #send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .mood-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    background: rgba(245,200,66,0.1); border: 1px solid rgba(245,200,66,0.3);
+    color: var(--gold); font-size: 0.85rem; margin-bottom: 7px; font-weight: 600;
+  }
+  .hint-text { font-size: 0.7rem; color: var(--muted); margin-top: 6px; }
+  .error-msg { color: var(--red); font-size: 0.82rem; font-style: italic; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-lamp">🪔</div>
+  <div class="header-text">
+    <h1>ഏതാ മൂഡ്</h1>
+    <p>Mollywood Vibe Companion · നിങ്ങളുടെ സ്വന്തം</p>
+  </div>
+  <div class="status-pill">Live ✦</div>
+</header>
+
+<div class="border-strip"><div></div></div>
+
+<div class="chat-wrapper">
+  <div id="chat-box"></div>
+  <div class="input-bar">
+    <textarea id="user-input" rows="1" placeholder="നിങ്ങൾക്ക് എങ്ങനെ തോന്നുന്നു? / How are you feeling?"></textarea>
+    <button id="send-btn">➤</button>
+  </div>
+</div>
+
+<script>
+const chatBox = document.getElementById('chat-box');
+const input   = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+
+const SYSTEM_PROMPT = `You are ഏതാ മൂഡ് Bot, a warm and friendly Mollywood-loving AI companion from Kerala. You ONLY recommend Malayalam movies and Malayalam/Kerala songs.
+
+Your job:
+1. Detect the user's mood (happy, sad, anxious, bored, romantic, energetic, tired, nostalgic, etc.)
+2. Respond warmly — mix a little Malayalam words/phrases naturally (like "Chetta", "Mol", "Ente", "Superb aayirunnu", "Entammo") into your English reply. Keep it 2-3 sentences, casual and fun.
+3. Recommend exactly 3 Malayalam movies and 3 Malayalam songs that perfectly match their mood.
+
+ALWAYS respond in this exact JSON format only (no markdown, no extra text):
+{
+  "mood": "<emoji + mood label e.g. 😔 Sadness / വിഷമം>",
+  "reply": "<your warm Mollywood-flavored message>",
+  "movies": [
+    {"title": "Movie Name (Year)", "search": "Movie Name Malayalam film YouTube"},
+    {"title": "Movie Name (Year)", "search": "Movie Name Malayalam film YouTube"},
+    {"title": "Movie Name (Year)", "search": "Movie Name Malayalam film YouTube"}
+  ],
+  "songs": [
+    {"title": "Song Name - Movie", "search": "Song Name Malayalam song Spotify"},
+    {"title": "Song Name - Movie", "search": "Song Name Malayalam song Spotify"},
+    {"title": "Song Name - Movie", "search": "Song Name Malayalam song Spotify"}
+  ]
+}
+
+Only recommend MALAYALAM movies and MALAYALAM songs. Be accurate with real movie/song titles.`;
+
+let history = [];
+
+function ytURL(q)      { return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q); }
+function spotifyURL(q) { return 'https://open.spotify.com/search/' + encodeURIComponent(q); }
+
+function appendMsg(role, html) {
+  const wrap = document.createElement('div');
+  wrap.className = `msg ${role}`;
+  const av = document.createElement('div');
+  av.className = `avatar ${role === 'bot' ? 'bot-av' : 'user-av'}`;
+  av.textContent = role === 'bot' ? '🪔' : '🙂';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = html;
+  wrap.appendChild(av); wrap.appendChild(bubble);
+  chatBox.appendChild(wrap);
+  chatBox.scrollTop = chatBox.scrollHeight;
+  return bubble;
+}
+
+function showTyping() {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg bot'; wrap.id = 'typing-ind';
+  const av = document.createElement('div');
+  av.className = 'avatar bot-av'; av.textContent = '🪔';
+  const t = document.createElement('div');
+  t.className = 'typing';
+  t.innerHTML = '<span></span><span></span><span></span>';
+  wrap.appendChild(av); wrap.appendChild(t);
+  chatBox.appendChild(wrap);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+function removeTyping() { const t = document.getElementById('typing-ind'); if (t) t.remove(); }
+
+function buildBotHTML(data) {
+  let html = `<div class="mood-badge">${data.mood}</div>`;
+  html += `<div>${data.reply}</div>`;
+  html += `<div class="rec-section">`;
+
+  // Movies → YouTube
+  html += `<div class="rec-card movies"><h4>🎬 Malayalam Movies · tap to watch on YouTube</h4><div class="rec-list">`;
+  (data.movies || []).forEach(m => {
+    const url = ytURL(m.search || m.title + ' Malayalam movie trailer');
+    html += `<a class="rec-pill movie" href="${url}" target="_blank" rel="noopener">
+      <span class="pill-icon">▶</span>${m.title}
+    </a>`;
+  });
+  html += `</div></div>`;
+
+  // Songs → Spotify
+  html += `<div class="rec-card songs"><h4>🎵 Malayalam Songs · tap to play on Spotify</h4><div class="rec-list">`;
+  (data.songs || []).forEach(s => {
+    const url = spotifyURL(s.search || s.title + ' Malayalam');
+    html += `<a class="rec-pill song" href="${url}" target="_blank" rel="noopener">
+      <span class="pill-icon">♫</span>${s.title}
+    </a>`;
+  });
+  html += `</div></div>`;
+
+  html += `</div>`;
+  html += `<div class="hint-text">🔴 Movies open YouTube &nbsp;·&nbsp; 🟢 Songs open Spotify</div>`;
+  return html;
+}
+
+function buildMoodChips() {
+  const moods = [
+    { e: '😊', ml: 'സന്തോഷം', en: 'Happy' },
+    { e: '😔', ml: 'വിഷമം', en: 'Sad' },
+    { e: '💕', ml: 'പ്രണയം', en: 'Romantic' },
+    { e: '😤', ml: 'ടെൻഷൻ', en: 'Stressed' },
+    { e: '😴', ml: 'ക്ഷീണം', en: 'Tired' },
+    { e: '💃', ml: 'ഊർജ്ജം', en: 'Energetic' },
+    { e: '🥺', ml: 'നൊസ്റ്റാൾജിയ', en: 'Nostalgic' },
+    { e: '😒', ml: 'മടുപ്പ്', en: 'Bored' },
+  ];
+  let html = `<div style="color:var(--muted);font-size:0.75rem;margin-bottom:7px;letter-spacing:0.04em;">നിങ്ങളുടെ mood തിരഞ്ഞെടുക്കൂ ↓</div>`;
+  html += `<div class="mood-chips">`;
+  moods.forEach(m => { html += `<button class="chip" onclick="quickMood('${m.en}')">${m.e} ${m.ml}</button>`; });
+  html += `</div>`;
+  return html;
+}
+
+async function sendMessage(text) {
+  if (!text.trim()) return;
+  input.value = ''; input.style.height = 'auto';
+  appendMsg('user', text);
+  history.push({ role: 'user', content: text });
+  showTyping(); sendBtn.disabled = true;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: history
+      })
+    });
+    const data = await res.json();
+    const raw = (data.content || []).map(c => c.text || '').join('');
+    removeTyping();
+    try {
+      const clean = raw.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+      appendMsg('bot', buildBotHTML(parsed));
+      history.push({ role: 'assistant', content: raw });
+    } catch {
+      appendMsg('bot', `<div>${raw}</div>`);
+      history.push({ role: 'assistant', content: raw });
+    }
+  } catch (err) {
+    removeTyping();
+    appendMsg('bot', `<span class="error-msg">Entammo! Something went wrong. ഒന്നുകൂടി try ചെയ്യൂ! (${err.message})</span>`);
+  }
+  sendBtn.disabled = false;
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function quickMood(mood) { sendMessage(`I'm feeling ${mood}`); }
+
+sendBtn.addEventListener('click', () => sendMessage(input.value));
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input.value); }
+});
+input.addEventListener('input', () => {
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+});
+
+window.onload = () => {
+  const welcome = `
+    <div style="font-size:1.1rem;margin-bottom:8px">നമസ്കാരം! 🙏</div>
+    Ente peru <strong style="color:var(--gold)">ഏതാ മൂഡ്</strong> — നിങ്ങളുടെ Mollywood companion!<br><br>
+    Tell me how you're feeling and I'll pick the perfect <strong>Malayalam movies 🎬</strong> and <strong>songs 🎵</strong> — tap any pill to open directly on <span style="color:#ff7070">YouTube</span> or <span style="color:#1ed760">Spotify</span>!<br><br>
+    <em style="color:var(--muted);font-size:0.82rem">Enthu thonnunnu? / What are you feeling today?</em>
+  `;
+  const bubble = appendMsg('bot', welcome);
+  bubble.innerHTML += buildMoodChips();
+};
+</script>
+</body>
+</html>
